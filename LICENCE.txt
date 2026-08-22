@@ -1,0 +1,73 @@
+PC Remote — End User Licence Agreement
+
+Copyright (c) 2026 Tarang Dwivedy. All rights reserved.
+
+PC Remote is free to use. Its source code is not published, and no rights to it
+are granted by this licence.
+
+
+1. WHAT YOU MAY DO
+
+You may install and use PC Remote on any number of computers you own or
+administer, for personal or commercial purposes, at no charge.
+
+You may pass the unmodified installer on to another person, provided you charge
+nothing for it and provided this licence travels with it.
+
+
+2. WHAT YOU MAY NOT DO
+
+You may not:
+
+  (a) sell, rent, license, or otherwise charge anyone for this software;
+
+  (b) modify, adapt, translate, or create derivative works from it;
+
+  (c) reverse engineer, decompile, or disassemble it, or attempt to recover its
+      source code, except to the extent this restriction is prohibited by
+      applicable law;
+
+  (d) remove or alter any copyright, trademark, or other proprietary notice;
+
+  (e) redistribute it as part of another product, or as part of any paid or
+      bundled offering.
+
+
+3. SOURCE CODE
+
+The source code of PC Remote is proprietary and confidential. It is not
+published under this licence or any other. No licence to copy, use, adapt, or
+distribute the source code is granted, whether express or implied.
+
+Earlier versions of this software were published under the MIT licence. That
+grant, for those versions, cannot be withdrawn, and this licence does not
+attempt to withdraw it. This licence governs this version and every version
+released after it.
+
+
+4. THIRD-PARTY COMPONENTS
+
+PC Remote includes open source components that remain under their own licences.
+Those licences take precedence over this one for those components, and nothing
+here restricts any right they grant you. See THIRD-PARTY-NOTICES.txt.
+
+
+5. NO WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+
+6. NO LIABILITY
+
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+7. TERMINATION
+
+This licence ends automatically if you breach it. On termination you must stop
+using the software and remove it from your computers.
