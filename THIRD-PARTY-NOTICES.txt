@@ -1,8 +1,8 @@
-PC Remote — Third-Party Notices
+Remot — Third-Party Notices
 
-PC Remote is proprietary software. It includes the open source components
+Remot is proprietary software. It includes the open source components
 listed below, each of which remains under its own licence. Those licences
-govern those components, and nothing in the PC Remote licence restricts any
+govern those components, and nothing in the Remot licence restricts any
 right they grant you.
 
 Generated from the production dependency tree. 126 components.

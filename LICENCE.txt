@@ -1,14 +1,14 @@
-PC Remote — End User Licence Agreement
+Remot — End User Licence Agreement
 
 Copyright (c) 2026 Tarang Dwivedy. All rights reserved.
 
-PC Remote is free to use. Its source code is not published, and no rights to it
+Remot is free to use. Its source code is not published, and no rights to it
 are granted by this licence.
 
 
 1. WHAT YOU MAY DO
 
-You may install and use PC Remote on any number of computers you own or
+You may install and use Remot on any number of computers you own or
 administer, for personal or commercial purposes, at no charge.
 
 You may pass the unmodified installer on to another person, provided you charge
@@ -35,7 +35,7 @@ You may not:
 
 3. SOURCE CODE
 
-The source code of PC Remote is proprietary and confidential. It is not
+The source code of Remot is proprietary and confidential. It is not
 published under this licence or any other. No licence to copy, use, adapt, or
 distribute the source code is granted, whether express or implied.
 
@@ -47,7 +47,7 @@ released after it.
 
 4. THIRD-PARTY COMPONENTS
 
-PC Remote includes open source components that remain under their own licences.
+Remot includes open source components that remain under their own licences.
 Those licences take precedence over this one for those components, and nothing
 here restricts any right they grant you. See THIRD-PARTY-NOTICES.txt.
 
