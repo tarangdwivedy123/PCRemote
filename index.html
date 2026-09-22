@@ -3,155 +3,390 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Remot — control your PC from your phone</title>
+    <title>Remot — PC Remote Controller | Control your PC from your phone</title>
     <meta
       name="description"
-      content="Turn your phone into a remote control for your Windows PC. Volume, media, monitors and power — over your own Wi-Fi, with nothing in the cloud. Free to use."
+      content="Turn your phone into a remote control for your Windows PC. Volume, media, monitor inputs and power — over your own Wi-Fi, with nothing in the cloud. Free on the Microsoft Store."
     />
+    <meta property="og:title" content="Remot — control your PC from your phone" />
+    <meta
+      property="og:description"
+      content="Volume, music, monitor inputs, brightness and power, from anywhere in the house. No account, no cloud."
+    />
+    <meta property="og:image" content="media/3.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0b0c0f" />
     <link rel="icon" href="pcremote.ico" />
     <style>
       /* One file, no build step, no external requests: the page has to keep
          working years from now with nobody maintaining it. */
       :root {
         --bg: #0b0c0f;
+        --bg-2: #101217;
         --panel: #14161b;
         --line: #23262e;
+        --line-2: #2c3038;
         --text: #e8eaf0;
         --dim: #9aa1ae;
+        --dim-2: #6f7683;
         --accent: #4ade80;
         --accent-ink: #06240f;
+        --glow: rgba(74, 222, 128, 0.16);
+        --shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.7);
       }
       @media (prefers-color-scheme: light) {
         :root {
           --bg: #f7f8fa;
+          --bg-2: #eef1f5;
           --panel: #ffffff;
           --line: #e3e6ec;
+          --line-2: #d4d9e2;
           --text: #14161b;
           --dim: #5c6472;
+          --dim-2: #838b98;
           --accent: #16a34a;
           --accent-ink: #ffffff;
+          --glow: rgba(22, 163, 74, 0.12);
+          --shadow: 0 24px 60px -22px rgba(20, 22, 27, 0.22);
         }
       }
       * {
         box-sizing: border-box;
       }
+      /* Several slot rules declare a display, which would otherwise win against
+         the browser's own rule for the hidden attribute and show empty slots. */
+      [hidden] {
+        display: none !important;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
       body {
         margin: 0;
         background: var(--bg);
         color: var(--text);
-        font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+        font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
           sans-serif;
         -webkit-font-smoothing: antialiased;
       }
       .wrap {
-        max-width: 780px;
+        max-width: 1080px;
         margin: 0 auto;
-        padding: 0 20px;
+        padding: 0 24px;
       }
-      header {
-        text-align: center;
-        padding: 72px 0 8px;
+      .narrow {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
       }
-      .mark {
-        width: 72px;
-        height: 72px;
-        margin: 0 auto 22px;
-        border-radius: 18px;
-        background: linear-gradient(140deg, #181a20, #2e323e);
+      a {
+        color: inherit;
+      }
+
+      /* -- top bar ---------------------------------------------------------- */
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: var(--bg);
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
+      }
+      .bar.scrolled {
+        border-bottom-color: var(--line);
+      }
+      .bar .wrap {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        height: 62px;
       }
-      .mark svg {
-        width: 40px;
-        height: 40px;
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 640;
+        letter-spacing: -0.01em;
+        text-decoration: none;
+      }
+      .brand svg {
+        width: 22px;
+        height: 22px;
+      }
+      .bar-cta {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 620;
+        text-decoration: none;
+        padding: 9px 17px;
+        border-radius: 9px;
+        background: var(--accent);
+        color: var(--accent-ink);
+      }
+      .bar-cta:hover {
+        filter: brightness(1.08);
+      }
+      @media (max-width: 520px) {
+        .bar-cta {
+          font-size: 13.5px;
+          padding: 8px 14px;
+        }
+      }
+
+      /* -- hero ------------------------------------------------------------- */
+      .hero {
+        position: relative;
+        padding: 78px 0 12px;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -240px;
+        left: 50%;
+        width: 780px;
+        height: 520px;
+        transform: translateX(-50%);
+        background: radial-gradient(ellipse at center, var(--glow), transparent 68%);
+        pointer-events: none;
+      }
+      .hero .wrap {
+        position: relative;
+      }
+      /*
+        Single centred column until the hero capture actually loads, at which
+        point the script adds .has-art and it becomes two. So the page is not a
+        lopsided grid with a hole in it if that file is ever missing.
+      */
+      .hero-grid {
+        display: grid;
+        gap: 46px;
+        align-items: center;
+        text-align: center;
+        justify-items: center;
+      }
+      .hero-grid.has-art {
+        text-align: left;
+        justify-items: start;
+      }
+      @media (min-width: 880px) {
+        .hero-grid.has-art {
+          grid-template-columns: 1fr 300px;
+          gap: 56px;
+        }
       }
       h1 {
-        font-size: clamp(30px, 6vw, 44px);
-        line-height: 1.15;
-        margin: 0 0 14px;
-        letter-spacing: -0.02em;
+        font-size: clamp(32px, 5.6vw, 52px);
+        line-height: 1.1;
+        margin: 0 0 16px;
+        letter-spacing: -0.028em;
       }
       .sub {
         color: var(--dim);
-        font-size: clamp(16px, 2.4vw, 19px);
-        margin: 0 auto 34px;
-        max-width: 30em;
+        font-size: clamp(16.5px, 2.2vw, 19.5px);
+        margin: 0 0 30px;
+        max-width: 32em;
       }
       .cta {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
         background: var(--accent);
         color: var(--accent-ink);
-        font-size: 18px;
-        font-weight: 650;
+        font-size: 17.5px;
+        font-weight: 660;
         text-decoration: none;
-        padding: 16px 34px;
-        border-radius: 11px;
+        padding: 15px 30px;
+        border-radius: 12px;
         border: 0;
+        box-shadow: 0 10px 28px -10px var(--glow);
       }
       .cta:hover {
         filter: brightness(1.08);
       }
+      .cta svg {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 auto;
+      }
       .meta {
-        color: var(--dim);
+        color: var(--dim-2);
         font-size: 13.5px;
-        margin: 14px 0 0;
+        margin: 15px 0 0;
       }
-      .meta a {
+      /* The hero capture is a phone screenshot, so it is tall: cap its width or
+         it dominates everything beside it. */
+      .hero-art {
+        margin: 0;
+        width: 100%;
+        max-width: 300px;
+      }
+      .hero-art img {
+        display: block;
+        width: 100%;
+        border: 1px solid var(--line-2);
+        border-radius: 22px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      /* -- trust strip ------------------------------------------------------ */
+      .facts {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 54px 0 0;
+      }
+      .fact {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        border-radius: 999px;
+        padding: 7px 15px;
+        font-size: 13.5px;
         color: var(--dim);
       }
-      .shot {
-        margin: 56px 0 8px;
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        background: var(--panel);
-        padding: 26px;
+      .fact svg {
+        width: 14px;
+        height: 14px;
+        color: var(--accent);
+        flex: 0 0 auto;
       }
-      .steps {
-        list-style: none;
-        counter-reset: s;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        gap: 18px;
+
+      /* -- sections --------------------------------------------------------- */
+      section {
+        padding: 74px 0 0;
       }
-      .steps li {
-        counter-increment: s;
-        display: flex;
-        gap: 14px;
-        align-items: flex-start;
-      }
-      .steps li::before {
-        content: counter(s);
-        flex: 0 0 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: var(--accent);
-        color: var(--accent-ink);
-        font-size: 14px;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .eyebrow {
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 680;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin: 0 0 10px;
       }
       h2 {
-        font-size: 22px;
-        margin: 56px 0 18px;
-        letter-spacing: -0.01em;
+        font-size: clamp(24px, 3.4vw, 32px);
+        line-height: 1.2;
+        margin: 0 0 14px;
+        letter-spacing: -0.022em;
       }
+      .lede {
+        color: var(--dim);
+        font-size: 17px;
+        margin: 0;
+      }
+      .center {
+        text-align: center;
+      }
+      .center .lede {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 34em;
+      }
+
+      /* -- video ------------------------------------------------------------ */
+      .player {
+        margin: 30px 0 0;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--line-2);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+      .player video {
+        display: block;
+        width: 100%;
+        background: #000;
+      }
+      figure.media {
+        margin: 0;
+      }
+      figure.media figcaption {
+        color: var(--dim-2);
+        font-size: 13.5px;
+        text-align: center;
+        margin-top: 12px;
+      }
+
+      /* -- the gallery ------------------------------------------------------ */
+      /*
+        Deliberately uncaptioned. These are six views of the same app rather
+        than six features being argued for one at a time, and a label under
+        each would be claiming an order the captures do not have. The words
+        make the case above; this is what it looks like.
+
+        Each opens full size on click, which is the only way the text inside a
+        phone screenshot is legible at a third of the page width.
+      */
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin: 30px 0 0;
+      }
+      @media (max-width: 760px) {
+        .shots {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+      }
+      .shots a {
+        display: block;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--line-2);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+        transition: transform 0.18s ease;
+      }
+      .shots a:hover {
+        transform: translateY(-3px);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .shots a {
+          transition: none;
+        }
+        .shots a:hover {
+          transform: none;
+        }
+      }
+      .shots img {
+        display: block;
+        width: 100%;
+        /* The captures are the same width but not the same height, so the grid
+           would otherwise step. Cropping the foot of the taller ones costs
+           nothing: it is the navigation bar, repeated in every one of them. */
+        height: 100%;
+        aspect-ratio: 1290 / 2340;
+        object-fit: cover;
+        object-position: top;
+      }
+
+      /* -- cards ------------------------------------------------------------ */
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
         gap: 14px;
+        margin: 28px 0 0;
       }
       .card {
         border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 16px 18px;
+        border-radius: 13px;
+        padding: 18px 20px;
         background: var(--panel);
       }
       .card h3 {
-        margin: 0 0 4px;
+        margin: 0 0 5px;
         font-size: 15.5px;
       }
       .card p {
@@ -161,164 +396,469 @@
       }
       .note {
         border-left: 3px solid var(--accent);
-        padding: 2px 0 2px 16px;
+        padding: 4px 0 4px 18px;
+        color: var(--dim);
+        font-size: 16px;
+        margin: 24px 0 0;
+      }
+
+      /* -- steps ------------------------------------------------------------ */
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--panel);
+        padding: 30px;
+        margin: 28px 0 0;
+      }
+      .steps {
+        list-style: none;
+        counter-reset: s;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 20px;
+      }
+      .steps li {
+        counter-increment: s;
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+      }
+      .steps li::before {
+        content: counter(s);
+        flex: 0 0 29px;
+        height: 29px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: var(--accent-ink);
+        font-size: 14px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .steps p {
+        margin: 3px 0 0;
         color: var(--dim);
         font-size: 15px;
       }
+
+      /* -- closing ---------------------------------------------------------- */
+      .closing {
+        margin: 84px 0 0;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: linear-gradient(180deg, var(--bg-2), var(--panel));
+        padding: 54px 30px;
+        text-align: center;
+      }
+      .closing h2 {
+        margin-bottom: 10px;
+      }
+      .closing .lede {
+        margin: 0 auto 26px;
+        max-width: 30em;
+      }
       footer {
-        margin: 72px 0 48px;
+        margin: 56px 0 44px;
         padding-top: 24px;
         border-top: 1px solid var(--line);
-        color: var(--dim);
+        color: var(--dim-2);
         font-size: 14px;
         text-align: center;
       }
       footer a {
         color: var(--dim);
       }
-      code {
-        font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
-        font-size: 0.92em;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        padding: 1px 6px;
-        border-radius: 5px;
+      footer .sep {
+        opacity: 0.45;
+        margin: 0 8px;
       }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <header>
-        <div class="mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.4"
-               stroke-linecap="round">
+    <div class="bar" id="bar">
+      <div class="wrap">
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+               stroke-linecap="round" aria-hidden="true">
             <path d="M8.2 5.6a7.5 7.5 0 1 0 7.6 0" />
             <path d="M12 2.5v6" />
           </svg>
-        </div>
-        <h1>Control your PC from your phone</h1>
-        <p class="sub">
-          Volume, music, monitor inputs, brightness and power — from anywhere in the house.
-          No account, no cloud, nothing leaves your Wi-Fi.
-        </p>
-
-        <a class="cta" href="https://github.com/tarangdwivedy123/PCRemote/releases/latest/download/Remot-Setup.exe">
-          Download for Windows
+          Remot
         </a>
-        <p class="meta">
-          Free to use · Windows 10 &amp; 11 ·
-          <a href="https://github.com/tarangdwivedy123/PCRemote/releases/latest/download/Remot.exe">
-            portable version
+        <a class="bar-cta" href="https://apps.microsoft.com/detail/9ngb6kb76jrz">Get it free</a>
+      </div>
+    </div>
+
+    <div class="hero" id="top">
+      <div class="wrap">
+        <div class="hero-grid" data-hero>
+          <div>
+            <h1>Control your PC from your phone</h1>
+            <p class="sub">
+              Volume, music, monitor inputs, brightness and power — from anywhere in the house.
+              No account, no cloud, nothing leaves your Wi-Fi.
+            </p>
+
+            <!--
+              The Store is the only way in, deliberately.
+
+              A loose .exe asks someone to click past a SmartScreen warning,
+              which is precisely the habit this app should not be teaching --
+              and the audience here is someone who was never going to open a
+              console. The Store install is signed, needs no warning clicked
+              through, declares its own firewall rule, and updates itself.
+            -->
+            <a class="cta" href="https://apps.microsoft.com/detail/9ngb6kb76jrz">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M3 3h8.4v8.4H3V3Zm9.6 0H21v8.4h-8.4V3ZM3 12.6h8.4V21H3v-8.4Zm9.6 0H21V21h-8.4v-8.4Z" />
+              </svg>
+              Get it from the Microsoft Store
+            </a>
+            <p class="meta">Free · Windows 10 &amp; 11 · updates itself · nothing to install on your phone</p>
+          </div>
+
+          <figure class="hero-art" data-slot data-hero-art hidden>
+            <img src="media/3.png"
+                 alt="Remot on a phone, showing the track playing on the PC, the system volume and three quick actions" />
+          </figure>
+        </div>
+
+        <div class="facts">
+          <span class="fact">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            Free, with nothing locked away
+          </span>
+          <span class="fact">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            No account to make
+          </span>
+          <span class="fact">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            Works on your own Wi-Fi
+          </span>
+          <span class="fact">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            No app to install on the phone
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!--
+      The walkthrough. Distinct from the silent loop further down: this one has
+      narration, so it gets controls and never autoplays.
+    -->
+    <section data-media-section hidden>
+      <div class="wrap narrow center">
+        <p class="eyebrow">Watch it work</p>
+        <h2>The whole thing, start to finish</h2>
+        <p class="lede">Pairing the phone, then every control, on a real machine.</p>
+        <figure class="media" data-slot hidden>
+          <div class="player">
+            <video src="media/tutorial.mp4" poster="media/tutorial-poster.png"
+                   controls playsinline preload="metadata"></video>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap narrow center">
+        <p class="eyebrow">On the phone</p>
+        <h2>What it looks like</h2>
+        <p class="lede">Six screens from a real setup. Tap any of them to see it full size.</p>
+      </div>
+      <div class="wrap">
+        <div class="shots">
+          <a data-slot hidden href="media/1.png">
+            <img src="media/1.png"
+                 alt="Brightness and input for two monitors, with the input list open on VGA and HDMI" />
           </a>
+          <a data-slot hidden href="media/2.png">
+            <img src="media/2.png"
+                 alt="System volume, a muted microphone, a choice of output device, and a slider for each app playing sound" />
+          </a>
+          <a data-slot hidden href="media/3.png">
+            <img src="media/3.png"
+                 alt="The track playing on the PC with cover art and a seek bar, above the volume and three quick actions" />
+          </a>
+          <a data-slot hidden href="media/4.png">
+            <img src="media/4.png"
+                 alt="Saved activities, each applying several changes in one press, above a summary of system load" />
+          </a>
+          <a data-slot hidden href="media/5.png">
+            <img src="media/5.png"
+                 alt="Processor, memory, disk and network charted live, with connection quality and response time below" />
+          </a>
+          <a data-slot hidden href="media/6.png">
+            <img src="media/6.png"
+                 alt="The presentation remote, with large Next and Back buttons and controls for starting the show" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="narrow center">
+          <p class="eyebrow">What you can do</p>
+          <h2>Everything you get up for, without getting up</h2>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <h3>Monitor inputs</h3>
+            <p>
+              HDMI to DisplayPort and back, and brightness with it — without reaching under the
+              bezel for buttons nobody can ever find. The one no other phone remote does.
+            </p>
+          </div>
+          <div class="card">
+            <h3>A slider for every app</h3>
+            <p>
+              Turn one app down without touching the rest. Mute the microphone, or move the
+              sound to a monitor's own output.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Whatever is playing</h3>
+            <p>
+              Play, pause, skip and scrub, with the track and its cover art — from Spotify,
+              YouTube, a video file, or anything else that makes sound.
+            </p>
+          </div>
+          <div class="card">
+            <h3>One-press routines</h3>
+            <p>
+              Build an activity once — drop the brightness, switch the monitor, mute the mic —
+              and it becomes a single button.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Presentation remote</h3>
+            <p>
+              Two buttons the size of your thumb, laid out for someone standing up. They send
+              keystrokes to whatever is in front, so PowerPoint, Keynote, Google Slides and any
+              PDF viewer all work.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Live system load</h3>
+            <p>
+              Processor, memory, disk and network charted live, down to the load on each core.
+              Useful on the day something is pegged and you are nowhere near the desk.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Power</h3>
+            <p>Lock, sleep, or turn the displays off. Shut down and restart need two taps, deliberately.</p>
+          </div>
+          <div class="card">
+            <h3>Send to PC</h3>
+            <p>Push text to the PC clipboard, or open a link on the big screen. Works the other way too.</p>
+          </div>
+          <div class="card">
+            <h3>Sleep timer</h3>
+            <p>Send the PC to sleep in twenty minutes, or any length you pick.</p>
+          </div>
+          <div class="card">
+            <h3>A way back</h3>
+            <p>Anything Remot changed, it can put back — the brightness, the input, the output device.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      The silent hook, kept below the fold rather than in the hero: it plays on
+      its own, and something moving beside the headline competes with the one
+      thing the top of the page is for.
+    -->
+    <section data-media-section hidden>
+      <div class="wrap narrow center">
+        <p class="eyebrow">In practice</p>
+        <h2>From the sofa, in two seconds</h2>
+        <figure class="media" data-slot hidden>
+          <div class="player">
+            <video src="media/demo.mp4" poster="media/demo-poster.png"
+                   autoplay muted loop playsinline></video>
+          </div>
+          <figcaption>Switching a monitor from the PC to a console, without getting up.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap narrow">
+        <div class="center">
+          <p class="eyebrow">Setting it up</p>
+          <h2>Three steps, and none of them is typing an address</h2>
+        </div>
+        <div class="panel">
+          <ol class="steps">
+            <li>
+              <div>
+                <strong>Install it from the Store and it opens a QR code.</strong>
+                <p>Nothing to configure. It picks its own port and opens the firewall for private networks only.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Point your phone's camera at it</strong>
+                <p>and tap the link that appears. Your phone needs to be on the same Wi-Fi as the PC.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>That's it — the controls are already on screen.</strong>
+                <p>Add it to your home screen and it behaves like any other app. It pairs once and remembers.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap narrow">
+        <div class="center">
+          <p class="eyebrow">Privacy</p>
+          <h2>It stays on your network</h2>
+        </div>
+        <p class="note">
+          There is no server in the middle and no account to make. The PC talks to your phone
+          directly over your own Wi-Fi, and the app only opens the firewall for
+          <strong>private</strong> networks — so it does nothing on café or airport Wi-Fi.
+          Your phone pairs once by scanning the code; nothing else can connect without it.
         </p>
-      </header>
-
-      <div class="shot">
-        <ol class="steps">
-          <li><div><strong>Install it and it opens a QR code.</strong></div></li>
-          <li>
-            <div>
-              <strong>Point your phone's camera at it</strong> and tap the link that appears.
-              Your phone needs to be on the same Wi-Fi as the PC.
-            </div>
-          </li>
-          <li>
-            <div>
-              <strong>That's it.</strong> The controls are already on screen. Add it to your
-              home screen and it behaves like an app.
-            </div>
-          </li>
-        </ol>
       </div>
+    </section>
 
-      <h2>What you can do</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Volume</h3>
-          <p>Whole system, or one app at a time. Mute the mic. Switch speakers or headphones.</p>
+    <section>
+      <div class="wrap">
+        <div class="narrow center">
+          <p class="eyebrow">Good to know</p>
+          <h2>The honest caveats</h2>
         </div>
-        <div class="card">
-          <h3>Whatever's playing</h3>
-          <p>Play, pause and skip, with the track and cover art, from Spotify, YouTube or anything else.</p>
-        </div>
-        <div class="card">
-          <h3>Monitors</h3>
-          <p>Change input — HDMI to DisplayPort and back — and set brightness, without reaching for the buttons under the bezel.</p>
-        </div>
-        <div class="card">
-          <h3>Power</h3>
-          <p>Lock, sleep, or turn the displays off. Shut down and restart need two taps, deliberately.</p>
-        </div>
-        <div class="card">
-          <h3>Send to PC</h3>
-          <p>Push text to the PC clipboard, or open a link on the big screen. Works the other way too.</p>
-        </div>
-        <div class="card">
-          <h3>Sleep timer</h3>
-          <p>Send the PC to sleep in twenty minutes, or any length you pick.</p>
+        <div class="grid">
+          <!--
+            The SmartScreen and firewall-prompt cards are gone with the loose
+            .exe they described. A Store install is signed, so nothing is
+            warned about, and the package declares its own firewall rule for
+            private networks only -- so nothing is asked either.
+          -->
+          <div class="card">
+            <h3>Updates arrive on their own</h3>
+            <p>
+              Installed from the Store, so Windows keeps it current. There is nothing to check
+              and no version to watch for.
+            </p>
+          </div>
+          <div class="card">
+            <h3>If your phone can't load the page</h3>
+            <p>
+              Windows marks most networks <b>Public</b>, which blocks other devices. Open
+              <b>Settings &rsaquo; Network &amp; internet &rsaquo; Wi-Fi</b>, click your network,
+              and choose <b>Private network</b>. Remot detects this and offers to fix it.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Monitor controls need DDC/CI</h3>
+            <p>
+              Most desktop monitors support it, though some ship with it switched off — look for
+              DDC/CI in the monitor's own menu. Laptop screens don't support it at all.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Old phones are fine</h3>
+            <p>The dashboard is built to run on Chrome going back to around version 70.</p>
+          </div>
+          <div class="card">
+            <h3>Removing it</h3>
+            <p>
+              Add or remove programs → Remot. It takes the firewall rule with it and asks before
+              deleting your settings.
+            </p>
+          </div>
+          <div class="card">
+            <h3>One PC at a time</h3>
+            <p>
+              Each PC runs its own copy and pairs with your phone separately. There is no fleet
+              view, and that is not what this is for.
+            </p>
+          </div>
         </div>
       </div>
+    </section>
 
-      <h2>It stays on your network</h2>
-      <p class="note">
-        There is no server in the middle and no account to make. The PC talks to your phone
-        directly over your own Wi-Fi, and the installer only opens the firewall for
-        <strong>private</strong> networks — so it does nothing on café or airport Wi-Fi.
-        Your phone pairs once by scanning the code; nothing else can connect without it.
-      </p>
-
-      <h2>Good to know</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Windows may warn you</h3>
-          <p>
-            The download isn't signed yet, so Windows shows a blue "protected your PC" box.
-            Click <strong>More info</strong>, then <strong>Run anyway</strong>.
-          </p>
-        </div>
-        <div class="card">
-          <h3>If Windows asks about the firewall</h3>
-          <p>
-            Tick <strong>Private networks</strong> only. Ticking <b>Public networks</b> grants
-            access on any network you ever join, including café and airport Wi-Fi — which is
-            exactly what Remot is built to avoid.
-          </p>
-        </div>
-        <div class="card">
-          <h3>If your phone can't load the page</h3>
-          <p>
-            Windows marks most networks <b>Public</b>, which blocks other devices. Open
-            <b>Settings &rsaquo; Network &amp; internet &rsaquo; Wi-Fi</b>, click your network, and
-            choose <b>Private network</b>. Remot detects this and explains it too.
-          </p>
-        </div>
-        <div class="card">
-          <h3>Monitor controls need DDC/CI</h3>
-          <p>
-            Most desktop monitors support it, though some ship with it switched off — look for
-            DDC/CI in the monitor's own menu. Laptop screens don't support it.
-          </p>
-        </div>
-        <div class="card">
-          <h3>Old phones are fine</h3>
-          <p>The dashboard is built to run on Chrome going back to around version 70.</p>
-        </div>
-        <div class="card">
-          <h3>Removing it</h3>
-          <p>
-            Add or remove programs → Remot. It takes the firewall rule with it and asks
-            before deleting your settings.
-          </p>
-        </div>
+    <div class="wrap">
+      <div class="closing">
+        <h2>Put the remote where your phone already is</h2>
+        <p class="lede">Free, on the Microsoft Store. Windows 10 and 11.</p>
+        <a class="cta" href="https://apps.microsoft.com/detail/9ngb6kb76jrz">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3 3h8.4v8.4H3V3Zm9.6 0H21v8.4h-8.4V3ZM3 12.6h8.4V21H3v-8.4Zm9.6 0H21V21h-8.4v-8.4Z" />
+          </svg>
+          Get it from the Microsoft Store
+        </a>
       </div>
 
       <footer>
         <a href="https://github.com/tarangdwivedy123/PCRemote/issues">Report a problem</a>
-        ·
+        <span class="sep">·</span>
         <a href="LICENCE.txt">licence</a>
-        ·
+        <span class="sep">·</span>
         <a href="privacy.html">privacy</a>
       </footer>
     </div>
+
+    <script>
+      /* Every capture slot ships hidden and reveals itself only once the file
+         behind it has actually loaded. So the page looks finished whether or
+         not a given file is there, never shows a broken-image box, and picks
+         each one up the moment it is dropped into media/ — no build step,
+         which is the rule this page lives by.
+
+         The hero follows the same rule at the layout level: one centred column
+         until its capture arrives, two once it has. A missing file costs the
+         page a picture, never a hole. */
+      (function () {
+        function reveal(el) {
+          var slot = el.closest("[data-slot]");
+          if (slot) slot.hidden = false;
+
+          var section = el.closest("[data-media-section]");
+          if (section) section.hidden = false;
+
+          if (el.closest("[data-hero-art]")) {
+            var hero = document.querySelector("[data-hero]");
+            if (hero) hero.className += " has-art";
+          }
+        }
+
+        var media = document.querySelectorAll("[data-slot] img, [data-slot] video");
+        Array.prototype.forEach.call(media, function (el) {
+          if (el.tagName === "VIDEO") {
+            /* loadedmetadata, not loadeddata: it fires for a video that is only
+               preloading its header, which is all the walkthrough does until
+               someone presses play. */
+            el.addEventListener("loadedmetadata", function () { reveal(el); }, { once: true });
+            return;
+          }
+          if (el.complete && el.naturalWidth > 0) { reveal(el); return; }
+          el.addEventListener("load", function () { reveal(el); }, { once: true });
+        });
+
+        /* The bar only grows a rule once the page is scrolled under it. */
+        var bar = document.getElementById("bar");
+        function onScroll() {
+          var y = window.pageYOffset || document.documentElement.scrollTop;
+          bar.className = y > 8 ? "bar scrolled" : "bar";
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
   </body>
 </html>
